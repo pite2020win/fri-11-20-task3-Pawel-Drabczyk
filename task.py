@@ -32,3 +32,21 @@
 #Delete these comments before commit!
 #
 #Good luck.
+class Matrix:
+  def __init__(self, n1=0, n2=0, n3=0, n4=0):
+    self.r1c1 = n1
+    self.r1c2 = n2
+    self.r2c1 = n3
+    self.r2c2 = n4
+
+  def __add__(self, m2):
+    return Matrix( self.r1c1 + m2.r1c1, self.r1c2 + m2.r1c2, self.r2c1 + m2.r2c1, self.r2c2 + m2.r2c2)  
+
+  def __str__(self):
+    return f'Printing matrix \n {self.r1c1} {self.r1c2}\n|{self.r2c1} {self.r2c2} '  
+
+if __name__ == '__main__':
+  m1 = Matrix(1, 1, 1, 1)
+  m2 = Matrix(2, 2, 2, 2)
+  m3 = m1 + m2
+  print(m3)
