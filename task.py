@@ -32,21 +32,113 @@
 #Delete these comments before commit!
 #
 #Good luck.
-class Matrix:
-  def __init__(self, n1=0, n2=0, n3=0, n4=0):
-    self.r1c1 = n1
-    self.r1c2 = n2
-    self.r2c1 = n3
-    self.r2c2 = n4
+import math
+import logging
 
-  def __add__(self, m2):
-    return Matrix( self.r1c1 + m2.r1c1, self.r1c2 + m2.r1c2, self.r2c1 + m2.r2c1, self.r2c2 + m2.r2c2)  
+class Matrix:
+  def __init__(self, listOfLists):
+    nRows = len(listOfLists)
+    self.dim = nRows
+    self.values = []
+    for l in listOfLists:
+      if len(l) != nRows:
+        raise ValueError
+      self.values.append(l)
+    self.index = 0
+
+  @staticmethod
+  def fromArguments(*args):
+    mSize = len(args)
+    nDim = int( round(math.sqrt(mSize)) )
+    listOfLists = []
+    if int(math.sqrt(mSize)+0.5)**2 == mSize :
+      for i in range( nDim ):
+        row = []
+        for j in range( nDim ):
+          row.append(args[i*nDim+j])
+        listOfLists.append(row)
+      return Matrix(listOfLists)
+    else:
+      raise ValueError
+
+
+
+  def __next__(self):
+    if self.index >= self.dim**2:
+      self.index = 0
+      raise StopIteration
+    else:
+      row = int( self.index / self.dim )
+      column = self.index - row*self.dim
+      self.index += 1
+      return self.values[row][column]
+
+  def __iter__(self):
+     return self
 
   def __str__(self):
-    return f'Printing matrix \n {self.r1c1} {self.r1c2}\n|{self.r2c1} {self.r2c2} '  
+    text = f'\n'
+    for row in self.values:
+      for i in row:
+        text += str(i)
+        text += ' '
+      text += '\n'
+    return text
+
+  def __add__(self, other):
+    tempList = []
+    if isinstance(other, float) or isinstance(other, int):
+      for i in self:
+        tempList.append(i+other)
+    elif isinstance(other, Matrix):
+      if other.dim != self.dim:
+        raise ValueError
+      else:
+        for i in range(self.dim):
+          for j in range(self.dim):
+            tempList.append( self.values[i][j] + other.values[i][j] )
+    print(tempList)
+    return Matrix( tempList )
+
+#  def __add__(self, m2):
+#    return Matrix( self.r1c1 + m2.r1c1, self.r1c2 + m2.r1c2, self.r2c1 + m2.r2c1, self.r2c2 + m2.r2c2)
+
+#  def __str__(self):
+#    return f'Printing matrix \n {self.r1c1} {self.r1c2}\n|{self.r2c1} {self.r2c2} '
 
 if __name__ == '__main__':
-  m1 = Matrix(1, 1, 1, 1)
-  m2 = Matrix(2, 2, 2, 2)
-  m3 = m1 + m2
-  print(m3)
+  logger = logging.getLogger()
+  logger.setLevel(logging.DEBUG)
+
+  try:
+    logging.info(f'Creating matrix from multiple arguments')
+    m1 = Matrix.fromArguments(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    logging.info(m1)
+    logging.info(f'Creating matrix from list of lists')
+    m2 = Matrix([[-3,1,-1],[15,-6,5],[-5,2,-2]])
+    logging.info(m2)
+  except ValueError:
+    logging.warning('Incorrect number of elements to create square matrix!!')
+
+  try:
+    logging.info(f'Adding matrixes m3 = m1 + m2')
+    m3 = m1 + m2
+    logging.info(m3)
+    logging.info(f'Adding number to matrix m3 = m1 + 2')
+    m3 = m1 + 2
+    logging.info(m3)
+  except ValueError:
+    logging.warning(f'Not equal dimensions of matrixes')
+
+  logging.info(f'Iterating throung the matrix!')
+  for i in m1:
+    logging.info(i)
+
+
+
+
+  try:
+    mWrong = Matrix.fromArguments(1, 1, 1)
+  except ValueError:
+    logging.warning("Trying to pass 3 elements to create matrix in a try block:\nIncorrect number of elements to create square matrix!!")
+
