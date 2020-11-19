@@ -1,37 +1,3 @@
-#Matrix. 
-
-
-#Write a class that can represent any 4𝑥4 real matrix. 
-#Include two functions to calculate the sum and dot product of two matrices. 
-#Next, write a program that imports this library module and use it to perform calculations.
-# You CAN'T use numpy.
-#Examples:
-#
-# matrix_1 = Matrix(4.,5.,6.,7.)
-# matrix_2 = Matrix(2.,2.,2.,1.)
-#
-# matrix_3 = matrix_2 @ matrix_1
-# matrix_4 = matrix_2 + matrix_1
-# matrix_4 = 6 + matrix_1
-# matrix_4 = matrix_1 + 6
-#
-# expand your solution to include other operations like
-# - subtraction 
-# - inversion
-# - string representation 
-#
-#Try to expand your implementation as best as you can. 
-#Think of as many features as you can, and try implementing them.
-#Make intelligent use of pythons syntactic sugar (overloading, iterators, generators, etc)
-#Most of all: CREATE GOOD, RELIABLE, READABLE CODE.
-#The goal of this task is for you to SHOW YOUR BEST python programming skills.
-#Impress everyone with your skills, show off with your code.
-#
-#Your program must be runnable with command "python task.py".
-#Show some usecases of your library in the code (print some things)
-#Delete these comments before commit!
-#
-#Good luck.
 import math
 import logging
 
@@ -85,8 +51,7 @@ class Matrix:
     text = f'\n'
     for row in self.values:
       for i in row:
-        text += str(i)
-        text += ' '
+        text += f'{i:.2f} '
       text += '\n'
     return text
 
@@ -170,12 +135,6 @@ class Matrix:
             tempList.append( self.values[i][j] * 1. / other.values[i][j] )
     return Matrix.fromList( tempList )
 
-#  def __add__(self, m2):
-#    return Matrix( self.r1c1 + m2.r1c1, self.r1c2 + m2.r1c2, self.r2c1 + m2.r2c1, self.r2c2 + m2.r2c2)
-
-#  def __str__(self):
-#    return f'Printing matrix \n {self.r1c1} {self.r1c2}\n|{self.r2c1} {self.r2c2} '
-
 if __name__ == '__main__':
   logger = logging.getLogger()
   logger.setLevel(logging.DEBUG)
@@ -185,7 +144,7 @@ if __name__ == '__main__':
     m1 = Matrix.fromArguments(1, 2, 3, 4, 5, 6, 7, 8, 9)
     logging.info(m1)
     logging.info(f'Creating matrix from list of lists')
-    m2 = Matrix([[-3,1,-1],[15,-6,5],[-5,2,-2]])
+    m2 = Matrix([[9,8,7],[6,5,4],[3,2,1]])
     logging.info(m2)
     logging.info(f'Creating matrix from list')
     m3 = Matrix([[1,0,0],[0,1,0],[0,0,1]])
@@ -201,7 +160,8 @@ if __name__ == '__main__':
     m4 = m1 + 2
     logging.info(m4)
     logging.info(f'Adding number to matrix m4 =  2 + m1')
-    m4 = 2 * m1
+    m4 = 2 + m1
+    logging.info(m4)
 
     logging.info(f'Subtracting matrixes m4 = m1 - m2')
     m4 = m1 - m2
@@ -227,10 +187,7 @@ if __name__ == '__main__':
     m4 = m1 / 2
     logging.info(m4)
 
-
     logging.info(f'Dot product of two matrices m1 @ m3 = {m1 @ m3}')
-
-
 
   except ValueError:
     logging.warning(f'Not equal dimensions of matrixes')
@@ -238,9 +195,6 @@ if __name__ == '__main__':
   logging.info(f'Iterating throung the matrix!')
   for i in m2:
     logging.info(i)
-
-
-
 
   try:
     mWrong = Matrix.fromArguments(1, 1, 1)
